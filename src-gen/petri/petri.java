@@ -369,7 +369,7 @@ public class petri {
   }
   
   private final static petri.Переход __загрузка_первого_станкаInitialValue = petri.Переход.create(((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getРобот_свободен(), petri.getПервый_станок_свободен(), petri.getНаличие_заготовки_в_накопителе()), petri.Позиция.class)), 
-    ((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getРобот_свободен(), petri.getЗаготовка_установлена_на_первом_станке()), petri.Позиция.class)), 30);
+    ((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getРобот_свободен(), petri.getЗаготовка_установлена_на_первом_станке()), petri.Позиция.class)), 5);
   
   public static final petri.Переход getОбработка_на_первом_станке() {
     if (!__initialized)
@@ -381,7 +381,7 @@ public class petri {
   }
   
   private final static petri.Переход __обработка_на_первом_станкеInitialValue = petri.Переход.create(((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getЗаготовка_установлена_на_первом_станке()), petri.Позиция.class)), 
-    ((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getЗаготовка_обработана_на_первом_станке()), petri.Позиция.class)), 60);
+    ((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getЗаготовка_обработана_на_первом_станке()), petri.Позиция.class)), 10);
   
   public static final petri.Переход getПереустановка() {
     if (!__initialized)
@@ -393,7 +393,7 @@ public class petri {
   }
   
   private final static petri.Переход __переустановкаInitialValue = petri.Переход.create(((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getРобот_свободен(), petri.getЗаготовка_обработана_на_первом_станке(), petri.getВторой_станок_свободен()), petri.Позиция.class)), 
-    ((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getРобот_свободен(), petri.getЗаготовка_установлена_на_втором_станке()), petri.Позиция.class)), 20);
+    ((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getРобот_свободен(), petri.getЗаготовка_установлена_на_втором_станке(), petri.getПервый_станок_свободен()), petri.Позиция.class)), 3);
   
   public static final petri.Переход getОбработка_на_втором_станке() {
     if (!__initialized)
@@ -405,7 +405,7 @@ public class petri {
   }
   
   private final static petri.Переход __обработка_на_втором_станкеInitialValue = petri.Переход.create(((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getЗаготовка_установлена_на_втором_станке()), petri.Позиция.class)), 
-    ((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getЗаготовка_обработана_на_втором_станке()), petri.Позиция.class)), 80);
+    ((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getЗаготовка_обработана_на_втором_станке()), petri.Позиция.class)), 15);
   
   public static final petri.Переход getРазгрузка_второго_станка() {
     if (!__initialized)
@@ -417,7 +417,7 @@ public class petri {
   }
   
   private final static petri.Переход __разгрузка_второго_станкаInitialValue = petri.Переход.create(((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getЗаготовка_обработана_на_втором_станке(), petri.getРобот_свободен()), petri.Позиция.class)), 
-    ((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getРобот_свободен(), petri.getНаличие_обработанной_заготовки_в_накопителе(), petri.getВторой_станок_свободен()), petri.Позиция.class)), 40);
+    ((petri.Позиция[])Conversions.unwrapArray(Arrays.<petri.Позиция>asList(petri.getРобот_свободен(), petri.getНаличие_обработанной_заготовки_в_накопителе(), petri.getВторой_станок_свободен()), petri.Позиция.class)), 4);
   
   public static final boolean проверка_массива(final petri.Позиция[] массив) {
     int j = 0;
@@ -478,12 +478,12 @@ public class petri {
     }
     
     private petri.Переход __resolve_переход() {
-      Collection<petri.Переход> _all = petri.Переход.getAll();
+      Collection<petri.Переход> _accessible = petri.Переход.getAccessible();
       final Function1<petri.Переход, Boolean> _function = (petri.Переход it) -> {
         petri.Позиция[] _входы = it.getВходы();
         return Boolean.valueOf(petri.проверка_массива(_входы));
       };
-      Iterable<petri.Переход> _filter = IterableExtensions.<petri.Переход>filter(_all, _function);
+      Iterable<petri.Переход> _filter = IterableExtensions.<petri.Переход>filter(_accessible, _function);
       petri.Переход _any = RaoCollectionExtensions.<petri.Переход>any(_filter);
       return _any;
     }
@@ -580,8 +580,9 @@ public class petri {
   protected static class terminateCondition implements Supplier<Boolean> {
     @Override
     public final Boolean get() {
-      double _currentTime = RaoRuntime.getCurrentTime();
-      return Boolean.valueOf((_currentTime >= 480));
+      petri.Позиция _наличие_обработанной_заготовки_в_накопителе = petri.getНаличие_обработанной_заготовки_в_накопителе();
+      int _количество_маркеров = _наличие_обработанной_заготовки_в_накопителе.getКоличество_маркеров();
+      return Boolean.valueOf((_количество_маркеров == 10));
     }
   }
   
